@@ -96,6 +96,7 @@ class SignProcessingSystem:
     def process_queue_and_signs(self, student_queue):
         """
         Processes students as they view signs and records their interactions.
+        //TODO fix duplication issue probably here
 
         Args:
             student_queue (Queue): Queue of students waiting to view signs.
