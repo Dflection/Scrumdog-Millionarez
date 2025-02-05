@@ -130,6 +130,7 @@ class SignProcessingSystem:
                 "student_id": student.identifier,  # Student identifier
                 "speed": student.speed,  # Student's speed (how fast they view signs)
                 "view_time": student.time,  # Total time the student interacts with signs
+                "num_days_attended": len(student.attendance_days),  # Number of days the student attended
                 "days_attended": student.attendance_days,  # Days the student attended class
             }
 
@@ -186,6 +187,7 @@ class SignProcessingSystem:
             print(f"Student ID: {student_data['student_id']}")
             print(f"Speed: {student_data['speed']:.2f}")  # Display student speed
             print(f"View Time: {student_data['view_time']:.2f}")  # Display student view time
+            print(f"Number of Days Attended: {student_data['num_days_attended']}")  # Display number of days attended
             print(f"Days Attended: {', '.join(student_data['days_attended'])}")  # List of days attended
             print("Sign Viewership:")
             for i in range(1, 21):
