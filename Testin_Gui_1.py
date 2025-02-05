@@ -2,6 +2,11 @@ import tkinter as tk
 from tkinter import messagebox
 import os
 from PIL import Image, ImageTk
+
+import scrumdog_queue
+import Student_Class
+import Database3
+
 # main file import
 '''import Main'''
 
@@ -80,6 +85,7 @@ class Scrum_Gui:
         # Put the data imported from Main into the Results text box
         self.results.insert(tk.END, imported_data)
     '''
+
 
 if __name__ == "__main__":
     window = tk.Tk()

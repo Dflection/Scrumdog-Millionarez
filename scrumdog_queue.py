@@ -1,6 +1,7 @@
 import random
 from queue import Queue
 from Student_Class import OneDayStudent, TwoDayStudent, ThreeDayStudent, FourDayStudent, FiveDayStudent
+import Database3
 
 
 class CircularLinkedList:
@@ -214,3 +215,7 @@ if __name__ == "__main__":
     sign_system = SignProcessingSystem(students, signs, random_sign_order=True)
     results = sign_system.process_students_for_week()  # Process students and signs for the week
     sign_system.print_results(results)  # Print the results of the simulation
+
+    test_csv_maker = Database3.Database('test.csv')
+    test_csv_maker.excel(results)
+    test_csv_maker.averages(1)
