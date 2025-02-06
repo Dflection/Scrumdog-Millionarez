@@ -121,44 +121,52 @@ class Database:
         print(final_numbies)
         return final_numbies
 
+    def percentages(self, days)-> None:
+            """
+            This method will read the csv file and return
+            the percentage of the signs seen by x day students.
+            """
+            # This is a list of numbers for each signs seconds seen by students that attended x days.
+            numbies = []
+            # This is the list of students that attended x days
+            student_group = []
+            # The Result is the variable for the number of signs seen by students
+            Result = 0
+            # This calls the method csv_to_dict to get dictionary items of the e
+            data = self.csv_to_dict()
+    
+            # For dictionary's in data if the days variable is in the ['days attended'] value for a student adds students to 
+            for dictionary in data: 
+    
+                # if str(days) in str(dictionary['days_attended']) and dictionary not in student_group:
+                #     student_group.append(dictionary)
+                # 
+                if int(days) == int(dictionary['num_days_attended']) and dictionary not in student_group:
+                    student_group.append(dictionary)                             
+    
+    
+            # For items in student group make a dictionary of each sign and its second value
+            for student in student_group:
+                # 20 is the maximum number of signs we decided on.
+                for i in range(1,21):
+                    sign_number = str(i)
+                    # If the number of seconds the sign was seen is greater than 0.         
+                    if float(student[f'sign{sign_number}']) > 0 and student.get(f'sign{sign_number}') not in numbies:
+                        Sign_dict = {
+                            'sign' : str(i),
+                            'seconds': student.get(f'sign{sign_number}')
+                        }
+                        numbies.append(Sign_dict)
+          
+            # This code below calculates the number of signs that were seen by a student out of the total number of signs.
+            for items in numbies:
+                if float(items['seconds']) > 4:
+                    Result +=1
+    
+                    Sign_total = int(len(numbies))
+            # This is our percentage variable
+            percentage = round((Result/Sign_total)*100, 2)
+       
+            return (percentage)
 
-if __name__ == "__main__":
-    diag = Database('test.csv')
 
-    # diag.excel(scrumdog_queue.)
-
-    diag.averages(3)
-
-# Not needed anymore since we added a integer in the dict/csv to store number of days attended
-    # M_one_day_student = ['Monday']
-    # T_one_day_student = ['Tuesday']
-    # W_one_day_student = ['Wednesday']
-    # F_one_day_student = ['Friday']
-    # TT_two_day_student = ['Tuesday', 'Thursday']
-    # Five_day_student = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-    # two_day_student = ['Wednesday', 'Thursday']
-
-    sign_total_simulation = int
-
-    # These variables will be calculated by Josh F.
-
-    one_day_signs_average = str
-
-    two_day_signs_average = str
-
-    three_day_signs_average = str
-
-    four_day_signs_average = str
-
-    five_day_signs_average = str
-
-    # This is what will be sent to Josh P.
-    oneday = f'one day students saw an average of {one_day_signs_average}/{sign_total_simulation} signs'
-
-    twoday = f'two day students saw an average of {two_day_signs_average}/{sign_total_simulation} signs'
-
-    threeday = f'three day students saw an average of {three_day_signs_average}/{sign_total_simulation} signs'
-
-    fourday = f'four day students saw an average of {four_day_signs_average}/{sign_total_simulation} signs'
-
-    fiveday = f'one day students saw an average of {five_day_signs_average}/{sign_total_simulation} signs'
