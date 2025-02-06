@@ -106,6 +106,8 @@ class SignProcessingSystem:
         """
         results = []  # List to store results of each student's interaction with signs
 
+        badlist=[]
+
         while not student_queue.empty():
             student = student_queue.get()  # Get the student from the queue
             student_time_remaining = student.time  # The time the student will interact with the signs
@@ -136,18 +138,16 @@ class SignProcessingSystem:
             }
 
             # Record viewing time for up to 20 signs
-            for i in range(1, 21):
+            for i in range(1, int(self.total_signs)):
                 # Round the view time to 2 decimals
                 student_data[f"sign{i}"] = round(student.viewership_stats.get(i, 0), 2)
 
-            # Check if student data already exists in results (based on student_id)
-            existing_student = next((data for data in results if data['student_id'] == student.identifier), None)
-            if existing_student:
-                # Update the existing student data with the latest data
-                existing_student.update(student_data)
-            else:
-                # If not found, add the new student data
-                results.append(student_data)
+ 
+            results.append(student_data)
+        
+        print('test')
+        print(f'Len results of process_queue_and_signs results list: {len(results)}\n')
+        print(f'Len results of process_queue_and_signs badlist: {len(badlist)}\n')
 
         return results  # Return the processed results
 
@@ -160,15 +160,21 @@ class SignProcessingSystem:
         """
         days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]  # Days of the week
         weekly_results = []  # List to store weekly results
-
+        # This code from 164 to 169 is where we are losing students in the sim
         for day in days_of_week:
             daily_queue = Queue()  # Queue to hold students for the current day
             for student in self.students:
                 if day in student.attendance_days:  # Check if the student attended on this day
                     daily_queue.put(student)  # Add the student to the daily queue
+                
 
-            daily_results = self.process_queue_and_signs(daily_queue)  # Process the daily queue
-            weekly_results.extend(daily_results)  # Add daily results to the weekly results
+        daily_results = self.process_queue_and_signs(daily_queue)  # Process the daily queue
+        weekly_results.extend(daily_results)  # Add daily results to the weekly results
+
+        print(f'Len self.students:{len(self.students)}\n')
+        print(f'Len of weekly results:{len(weekly_results)}\n')
+        # print(f'Len of daily_queue:{len(daily_queue)}\n')
+        # print(weekly_results)
 
         return weekly_results  # Return the aggregated results for the week
 
@@ -191,7 +197,7 @@ class SignProcessingSystem:
             print(f"Number of Days Attended: {student_data['num_days_attended']}")  # Display number of days attended
             print(f"Days Attended: {', '.join(student_data['days_attended'])}")  # List of days attended
             print("Sign Viewership:")
-            for i in range(1, 21):
+            for i in range(1, int(self.total_signs)):
                 if student_data[f"sign{i}"] > 0:
                     print(f"  Sign {i}: {student_data[f'sign{i}']:.2f} sec")  # Display time spent on each sign
             print("=" * 40, "\n")
@@ -208,14 +214,19 @@ if __name__ == "__main__":
     student_classes = [OneDayStudent, TwoDayStudent, ThreeDayStudent, FourDayStudent, FiveDayStudent]
     students = [
         random.choice(student_classes)(i, time=random.uniform(0.75, 1.25))  # Create students with random attributes
-        for i in range(1, 20)
+        for i in range(1, 21)
     ]
+    # for items in students:
+    #     print(items.identifier)
+    # print(len(students))
+   
 
     # Initialize and process the sign system
+    # below students = 20, signs = 5
     sign_system = SignProcessingSystem(students, signs, random_sign_order=True)
     results = sign_system.process_students_for_week()  # Process students and signs for the week
-    sign_system.print_results(results)  # Print the results of the simulation
+    # sign_system.print_results(results)  # Print the results of the simulation
 
     test_csv_maker = Database3.Database('test.csv')
     test_csv_maker.excel(results)
-    test_csv_maker.averages(1)
+    # test_csv_maker.averages(1)

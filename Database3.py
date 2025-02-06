@@ -50,7 +50,7 @@ class Database:
 
         return data
 
-    def averages(self, days) -> None:
+    def averages(self, days, numsigns) -> None:
         """
         This method will read the csv file and return and avg number.
         """
@@ -60,7 +60,6 @@ class Database:
         # This is the list of students that attended x days
         student_group = []
         # This is the total number of signs counted.
-        Sign_num = 0
         # This is the result of the averages
         final_numbies = []
         # This calls the method csv_to_dict to get dictionary items of the e
@@ -78,7 +77,8 @@ class Database:
         # For items in student group make a dictionary of each sign and its second value
         for student in student_group:
             # 20 is the maximum number of signs we decided on.
-            for i in range(1, 21):
+            print(student_group)
+            for i in range(1, numsigns+1):
                 sign_number = str(i)
                 # If the number of seconds the sign was seen is greater than 0.
                 if float(student[f'sign{sign_number}']) > 0 and student.get(f'sign{sign_number}') not in numbies:
@@ -116,12 +116,12 @@ class Database:
             del total['signtest']
             del total['seconds']
 
-        print(f'Total Number of students in simulation was {len(student_group)}')
-        print(f'Total Number of signs in simulation was {Sign_num}')
-        print(final_numbies)
+        # print(f'Total Number of students in simulation was {len(student_group)}')
+        # print(f'Total Number of signs in simulation was {Sign_num}')
+        # print(final_numbies)
         return final_numbies
 
-    def percentages(self, days)-> None:
+    def percentages(self, days, numsigns)-> None:
             """
             This method will read the csv file and return
             the percentage of the signs seen by x day students.
@@ -148,7 +148,7 @@ class Database:
             # For items in student group make a dictionary of each sign and its second value
             for student in student_group:
                 # 20 is the maximum number of signs we decided on.
-                for i in range(1,21):
+                for i in range(1,numsigns+1):
                     sign_number = str(i)
                     # If the number of seconds the sign was seen is greater than 0.         
                     if float(student[f'sign{sign_number}']) > 0 and student.get(f'sign{sign_number}') not in numbies:
@@ -163,10 +163,13 @@ class Database:
                 if float(items['seconds']) > 4:
                     Result +=1
     
-                    Sign_total = int(len(numbies))
+                    Sign_total = numsigns
             # This is our percentage variable
             percentage = round((Result/Sign_total)*100, 2)
        
             return (percentage)
 
 
+# diag = Database('test.csv')
+
+# print(diag.percentages(5))
