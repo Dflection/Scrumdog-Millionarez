@@ -163,7 +163,7 @@ class Database:
                 if float(items['seconds']) > 4:
                     Result +=1
     
-                    Sign_total = numsigns
+                    Sign_total = numsigns*int(len(student_group))
             # This is our percentage variable
             percentage = round((Result/Sign_total)*100, 2)
        
