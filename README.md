@@ -3,7 +3,7 @@ By The Scrumdog Millionaires
 (Chase Varvayanis, Joshua Fernandez, Joshua Poe, Dylan Henley, Andrew Lampkin)
 2-11-2024
 
-----------------------------------------------------------------------------------\
+----------------------------------------------------------------------------------
 
 HOW TO RUN APPLICATION:
 
