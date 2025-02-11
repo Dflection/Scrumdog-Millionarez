@@ -144,8 +144,8 @@ class SignProcessingSystem:
  
             results.append(student_data)
         
-        print('test')
-        print(f'Len results of process_queue_and_signs results list: {len(results)}\n')
+        # print('test')
+        # print(f'Len results of process_queue_and_signs results list: {len(results)}\n')
         # print(f'Len results of process_queue_and_signs badlist: {len(badlist)}\n')
 
         return results  # Return the processed results
@@ -167,7 +167,7 @@ class SignProcessingSystem:
                 if day in student.attendance_days:  # Check if the student attended on this day
                     daily_queue.put(student)  # Add the student to the daily queue
                 
-            print(f"Processing {day}: {daily_queue.qsize()} students in queue")
+            # print(f"Processing {day}: {daily_queue.qsize()} students in queue")
 
             daily_results = self.process_queue_and_signs(daily_queue) # Process the daily queue
             weekly_results.extend(daily_results)  # Add daily results to the weekly results
@@ -177,9 +177,16 @@ class SignProcessingSystem:
             # final_numbies
                 existing_item = next((entry for entry in final_results if int(entry['student_id']) == int(item['student_id'])), None)
 
+
                 # If the existing sign is not none then it will add the numbies items seconds to the existing items seconds.
                 if existing_item:
-                    pass
+                    if int(existing_item['student_id']) == int(item['student_id']) in final_results:
+                        pass
+
+                    elif int(existing_item['view_time']) > int(item['view_time']) in final_results:
+                        final_results.pop(item)
+                        final_results.append(existing_item)
+                    
                 # if existing item is none then it will create a new dictionary item for final numbies
                 else:
     
@@ -187,8 +194,8 @@ class SignProcessingSystem:
                 
             final_results.sort(key = lambda x:x['student_id'])
 
-        print(f'Len self.students:{len(self.students)}\n')
-        print(f'Len of weekly results:{len(weekly_results)}\n')
+        # print(f'Len self.students:{len(self.students)}\n')
+        # print(f'Len of weekly results:{len(weekly_results)}\n')
         # print(f'Len of daily_queue:{len(daily_queue)}\n')
         # print(weekly_results)
 
@@ -219,30 +226,30 @@ class SignProcessingSystem:
             print("=" * 40, "\n")
 
 
-if __name__ == "__main__":
-    # Create circular linked list of signs
-    signs = CircularLinkedList(random_sign_order=True)
-    for i in range(1, 7):
-        signs.append(i, 5)  # Add 6 signs, each with a display time of 5 seconds
-    signs.finalize_signs()  # Finalize the sign list (shuffle if random order is enabled)
+# if __name__ == "__main__":
+#     # Create circular linked list of signs
+#     signs = CircularLinkedList(random_sign_order=True)
+#     for i in range(1, 5):
+#         signs.append(i, 5)  # Add 6 signs, each with a display time of 5 seconds
+#     signs.finalize_signs()  # Finalize the sign list (shuffle if random order is enabled)
 
-    # Generate a list of students with randomized types and viewing times
-    student_classes = [OneDayStudent, TwoDayStudent, ThreeDayStudent, FourDayStudent, FiveDayStudent]
-    students = [
-        random.choice(student_classes)(i, time=random.uniform(0.75, 1.25))  # Create students with random attributes
-        for i in range(1, 201)
-    ]
-    # for items in students:
-    #     print(items.identifier)
-    # print(len(students))
+#     # Generate a list of students with randomized types and viewing times
+#     student_classes = [OneDayStudent, TwoDayStudent, ThreeDayStudent, FourDayStudent, FiveDayStudent]
+#     students = [
+#         random.choice(student_classes)(i, time=random.uniform(0.75, 1.25))  # Create students with random attributes
+#         for i in range(1, 10)
+#     ]
+#     # for items in students:
+#     #     print(items.identifier)
+#     # print(len(students))
    
 
-    # Initialize and process the sign system
-    # below students = 20, signs = 5
-    sign_system = SignProcessingSystem(students, signs, random_sign_order=True)
-    results = sign_system.process_students_for_week()  # Process students and signs for the week
-    sign_system.print_results(results)  # Print the results of the simulation
+#     # Initialize and process the sign system
+#     # below students = 20, signs = 5
+#     sign_system = SignProcessingSystem(students, signs, random_sign_order=True)
+#     results = sign_system.process_students_for_week()  # Process students and signs for the week
+#     # sign_system.print_results(results)  # Print the results of the simulation
 
-    # test_csv_maker = Database3.Database('test.csv')
-    # test_csv_maker.excel(results)
-    # # test_csv_maker.averages(1)
+#     test_csv_maker = Database3.Database('test.csv')
+#     test_csv_maker.excel(results)
+#     # test_csv_maker.averages(1)

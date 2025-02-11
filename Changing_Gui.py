@@ -98,7 +98,7 @@ class ScrumGui:
             
             students = [random.choice(student_classes)(i) for i in range(1, num_students + 1)]
 
-            print(f'Andrews list: {len(students)}')         
+                    
 
             # Create the Circular Linked List for signs
             signs = scrumdog_queue.CircularLinkedList(random_sign_order=True)
@@ -112,7 +112,7 @@ class ScrumGui:
             sign_system = scrumdog_queue.SignProcessingSystem(students, signs, random_sign_order=True)
             results = sign_system.process_students_for_week()
 
-            print(f'Chases list: {len(results)}')
+          
 
             # Save the results to a CSV file using Database3.py
             db = Database3.Database('test.csv')
