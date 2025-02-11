@@ -5,6 +5,7 @@
 
 import csv
 
+
 # The class for our database.
 class Database:
     def __init__(self, file=None) -> None:
@@ -114,44 +115,64 @@ class Database:
             del total['signtest']
             del total['seconds']
 
+        # print(f'Total Number of students in simulation was {len(student_group)}')
+        # print(f'Total Number of signs in simulation was {Sign_num}')
+        # print(final_numbies)
         return final_numbies
 
-    def percentages(self, days, numsigns) -> None:
-        """
-        This method will read the CSV file and return
-        the percentage of signs seen by students attending 'days' days.
-        """
-        numbies = []  # List of signs seen by students
-        student_group = []  # List of students attending the given number of days
-        total_signs_seen = 0  # Count of actual signs seen
-        data = self.csv_to_dict()  # Fetch CSV data
-        
-        # Get all students who attended 'days' days
-        for dictionary in data:
-            if int(days) == int(dictionary['num_days_attended']):
-                student_group.append(dictionary)
-        
-        # If no students found, return 0% (prevents division errors)
-        if not student_group:
-            return 0.0
+    def percentages(self, days, numsigns)-> None:
+            """
+            This method will read the csv file and return
+            the percentage of the signs seen by x day students.
+            """
+            # This is a list of numbers for each signs seconds seen by students that attended x days.
+            numbies = []
+            # This is the list of students that attended x days
+            student_group = []
+            # The Result is the variable for the number of signs seen by students
+            Result = 0
+            # This calls the method csv_to_dict to get dictionary items of the e
+            data = self.csv_to_dict()
+    
+            # For dictionary's in data if the days variable is in the ['days attended'] value for a student adds students to 
+            for dictionary in data: 
+    
+                # if str(days) in str(dictionary['days_attended']) and dictionary not in student_group:
+                #     student_group.append(dictionary)
+                # 
+                if int(days) == int(dictionary['num_days_attended']) and dictionary not in student_group:
+                    student_group.append(dictionary)
+            # print(f"There are {len(student_group)} {days} day students")                             
+    
+    
+            # For items in student group make a dictionary of each sign and its second value
+            for student in student_group:
+                # 20 is the maximum number of signs we decided on.
+                for i in range(1,numsigns+1):
+                    sign_number = str(i)
+                    # If the number of seconds the sign was seen is greater than 0.         
+                    if float(student[f'sign{sign_number}']) > 0 and student.get(f'sign{sign_number}') not in numbies:
+                        Sign_dict = {
+                            'sign' : str(i),
+                            'seconds': student.get(f'sign{sign_number}')
+                        }
+                        numbies.append(Sign_dict)
+          
+            # This code below calculates the number of signs that were seen by a student out of the total number of signs.
+            for items in numbies:
+                if float(items['seconds']) > 2:
+                    Result +=1
 
-        # For each student, check which signs they have seen
-        for student in student_group:
-            for i in range(1, numsigns + 1):  # Loop over all sign columns
-                sign_number = str(i)
-                seen_time = float(student.get(f'sign{sign_number}', 0))  # Default 0 if missing
-                
-                if seen_time > 0:  # Count all signs seen, not just those > 2
-                    total_signs_seen += 1
+                    Sign_total = numsigns*int(len(student_group))
+            # This is our percentage variable
+            percentage = round((Result/Sign_total)*100, 2)
 
-        # Correct denominator: total possible signs seen
-        Sign_total = numsigns * len(student_group)
+            # print(f'This is the total number of signs seen by {days} students that is greater than 0 which is {len(numbies)}')
+            # print(f'This is the total number of signs in the numbies list that were seen for more than 2 seconds which is {Result}')
+            # print(f'studentgroup = {student_group}')
+            return (percentage)
 
-        # Avoid division by zero
-        if Sign_total == 0:
-            return 0.0
 
-        # Calculate percentage correctly
-        percentage = round((total_signs_seen / Sign_total) * 100, 2)
+# diag = Database('test.csv')
 
-        return percentage
+# print(diag.percentages(5))
